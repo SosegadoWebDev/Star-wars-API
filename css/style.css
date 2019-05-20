@@ -1,0 +1,92 @@
+@font-face {
+    font-family: Starwars;
+    src: local("Starwars"), url(../font/stjedise/STJEDISE.TTF);
+    font-weight: bold;
+  }
+body {
+    background-image: url(../img/starwarsimgbody.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+    height: 100vh;
+    width: 100vw;
+    font-family: Starwars;
+}
+nav ul li {
+    display: inline-block;
+    list-style: none;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    margin-left: 15px;
+}
+a {
+    text-decoration-style: none;
+    color: rgb(134, 128, 128);
+}
+a:hover {
+    text-decoration: none;
+    color: rgb(233, 219, 219);
+}
+input, textarea {
+    background-color: rgba(255, 255, 255, 0.573) !important;
+}
+#title-starwars {
+    font-size: 25px;
+    color: gold !important;
+}
+.home-section {
+    margin: 0;
+    padding: 0;
+    margin-top: 20vh;
+    text-align: center;
+}
+.contact-section {
+    text-align: center;
+    margin-top: 5%;
+}
+.characters-section {
+    text-align: center;
+}
+.text-principal {
+    font-size: 20vh;
+    display: inline;
+    color: rgba(232, 235, 222, 0.716);
+    margin: 0;
+    padding: 0;
+}
+.text-normal {
+    color: rgba(232, 235, 222, 0.716);
+    display: inline;
+}
+.text-principal:hover, .text-normal:hover {
+    color: rgba(218, 196, 196, 0.493);
+    transition: ease all 0.7s;
+}
+.input {
+    margin-top: 10px !important;
+}
+#input-button-enviar {
+    width: 100px;
+    margin: 0 auto;
+}
+small {
+    color: rgb(218, 24, 24);
+    text-shadow: 0px 0px 5px #fff;
+}
+.button-characters {
+    width: 150px;
+}
+.table {
+    font-size: 14px;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: rgb(236, 221, 220);
+}
+th {
+    margin: 0 !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
