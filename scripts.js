@@ -81,7 +81,7 @@ $(document).ready(function () {
         //resultados = !(JSON.parse(localStorage.getItem("Personajes-Star-Wars"))) ? resultados = [] : resultados = JSON.parse(localStorage.getItem("Personajes-Star-Wars"))
         resultados.push(info.results)
         for (var i = 0; i < info.results.length; i++) {
-            $("tbody").append("<tr>" + "<th>" + $("tr").length + "</th>" + "<th>" + info.results[i].name + "</th>" + "<th>" + info.results[i].gender + "</th>" + "<th>" + info.results[i].height + "</th>" + "<th>" + info.results[i].mass + "</th>" + "<th>" + info.results[i].eye_color + "</th>" + "<th>" + "<button type='button' id='" + ($("tr").length) + "' class='btn btn-success button-save'>" + "Guardar" + "</button>" + "</th>" + "</tr>")
+            $(".char-table").append("<tr>" + "<th>" + $("tr").length + "</th>" + "<th>" + info.results[i].name + "</th>" + "<th>" + info.results[i].gender + "</th>" + "<th>" + info.results[i].height + "</th>" + "<th>" + info.results[i].mass + "</th>" + "<th>" + info.results[i].eye_color + "</th>" + "<th>" + "<button type='button' id='" + ($("tr").length) + "' class='btn btn-success button-save'>" + "Guardar" + "</button>" + "</th>" + "</tr>")
         }
     }
     $(".button-characters").on("click", function (event) {
@@ -99,16 +99,16 @@ $(document).ready(function () {
     //functión button save
     function guardarEnLocalStorage(key, array) {
         if (true) {
-           var CharactersList = !(JSON.parse(localStorage.getItem("Personajes-Star-Wars"))) ? CharactersList = [] : CharactersList = JSON.parse(localStorage.getItem("Personajes-Star-Wars"))
-           CharactersList.push(array)
-           var charJson = JSON.stringify(CharactersList)
+            var CharactersList = !(JSON.parse(localStorage.getItem("Personajes-Star-Wars"))) ? CharactersList = [] : CharactersList = JSON.parse(localStorage.getItem("Personajes-Star-Wars"))
+            CharactersList.push(array)
+            var charJson = JSON.stringify(CharactersList)
             localStorage.setItem(key, charJson)
         }
     }
-    function levantarStorage(key) {
+    function levantarLocalStorage(key) {
         if (localStorage.getItem(key)) {
-            var showCharacters = JSON.parse(localStorage.getItem(key))
-            console.log(showCharacters)
+            var listCharacters = JSON.parse(localStorage.getItem(key))
+            return listCharacters
         }
     }
     $(".container").on("click", ".button-save", function (event) {
@@ -120,11 +120,53 @@ $(document).ready(function () {
             mass: $("tr")[captureIdToSave].children[4].textContent,
             eye_color: $("tr")[captureIdToSave].children[5].textContent
         }
-        $("#"+ captureIdToSave).attr("disabled", true)
-        for (var i = 0; i < resultados.length; i++) {
-            for (var ii = 0; ii < resultados[i].length; ii++) {
-                if (resultados[i][ii].name == ($("tr")[captureIdToSave].children[1].textContent)) {
-                    guardarEnLocalStorage("Personajes-Star-Wars", saveChar)
+        $("#" + captureIdToSave).attr("disabled", true)
+        //Guardar la data validando antes que no existan en el LocalStorage
+        if (levantarLocalStorage("Personajes-Star-Wars")) {
+            for (var i = 0; i < (levantarLocalStorage("Personajes-Star-Wars").length); i++) {
+                if (!(levantarLocalStorage("Personajes-Star-Wars")[i].name == ($("tr")[captureIdToSave].children[1].textContent))) {
+                    if (levantarLocalStorage("Personajes-Star-Wars")[i].name == ($("tr")[captureIdToSave].children[1].textContent)) {
+                        return false
+                    } else if (levantarLocalStorage("Personajes-Star-Wars")[(levantarLocalStorage("Personajes-Star-Wars").length) - 1].name != ($("tr")[captureIdToSave].children[1].textContent)) {
+                        if (i == (levantarLocalStorage("Personajes-Star-Wars").length - 1)) {
+                            guardarEnLocalStorage("Personajes-Star-Wars", saveChar)
+                        }
+                    } else {
+                        return false
+                    }
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            guardarEnLocalStorage("Personajes-Star-Wars", saveChar)
+        }
+    })
+    //mostrar LocalStorage en la guardados
+    function showCharacters(characters) {
+        if (levantarLocalStorage("Personajes-Star-Wars")) {
+            $(".save-table-head").append("<tr>" + "<th>" + 0 + "</th>" + "<th>" + "Nombre" + "</th>" + "<th>" + "Género" + "</th>" + "<th>" + "Altura" + "</th>" + "<th>" + "Peso" + "</th>" + "<th>" + "Color de ojos" + "</th>" + "<th>" + "Eliminar" + "</th>" + "</tr>")
+            for (var i = 0; i < characters.length; i++) {
+                $(".save-table-body").append("<tr>" + "<th>" + $("tr").length + "</th>" + "<th>" + characters[i].name + "</th>" + "<th>" + characters[i].gender + "</th>" + "<th>" + characters[i].height + "</th>" + "<th>" + characters[i].mass + "</th>" + "<th>" + characters[i].eye_color + "</th>" + "<th>" + "<button type='button' id='" + ($("tr").length) + "' class='btn btn-danger button-delete'>" + "Eliminar" + "</button>" + "</th>" + "</tr>")
+            }
+        }
+    }
+    showCharacters(levantarLocalStorage("Personajes-Star-Wars"))
+    //Eliminar personaje de guardado.html
+    $(".container").on("click", ".button-delete", function (event) {
+        var captureIdToSave = event.target.id
+        for (var i = 0; i < levantarLocalStorage("Personajes-Star-Wars").length; i++) {
+            if ($("tr")[captureIdToSave].children[1].textContent == levantarLocalStorage("Personajes-Star-Wars")[i].name) {
+                var x = levantarLocalStorage("Personajes-Star-Wars")
+                x.splice(i, 1)
+                localStorage.setItem("Personajes-Star-Wars", JSON.stringify(x))
+                $("tr")[i + 1].remove()
+                if (localStorage.getItem("Personajes-Star-Wars") == "[]") {
+                    localStorage.clear()
+                    break;
+                }
+                for (var ii = 0; ii < $("tr").length - 1; ii++){
+                    $(".button-delete")[ii].id = ii + 1
                 }
             }
         }

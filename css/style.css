@@ -47,6 +47,9 @@ input, textarea {
 .characters-section {
     text-align: center;
 }
+.save-section {
+    text-align: center;
+}
 .text-principal {
     font-size: 20vh;
     display: inline;
